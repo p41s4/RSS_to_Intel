@@ -1,0 +1,316 @@
+{
+  "name": "RSS Daily Feed",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.bleepingcomputer.com/feed/",
+        "options": {}
+      },
+      "id": "05f09e89-9627-4bea-8957-3fc81cc5a9f1",
+      "name": "RSS - Feed 1",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        288,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/TheHackersNews",
+        "options": {}
+      },
+      "id": "b9c0bc97-7992-464f-9f6e-a2986c014643",
+      "name": "RSS - Feed 2",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        288,
+        320
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8e09ef83-6dfb-4548-8702-cb9bcfb3ec98",
+      "name": "Merge (+ Feed3)",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        704,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "91e5a4dc-1124-4198-8ec0-bace7352f2ce",
+              "leftValue": "={{ new Date($json.isoDate) }}",
+              "rightValue": "={{ new Date(new Date().setHours(0,0,0,0)) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            },
+            {
+              "id": "0aae4757-4384-42f5-a57c-9f0628027bbe",
+              "leftValue": "={{ $json.isoDate }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1168,
+        208
+      ],
+      "id": "e794005d-c54e-4083-b721-6ba71a81d72e",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "ipUXs3zSgGLu0Qsd",
+          "mode": "list",
+          "cachedResultName": "n8n trial",
+          "cachedResultUrl": "/projects/zajYkWfY1ssBgpMH/datatables/ipUXs3zSgGLu0Qsd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Titulo": "={{ $json.title }}",
+            "Enlace": "={{ $json.link }}",
+            "Resumen": "={{ $json.content }}",
+            "Approve": false,
+            "processed": false
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Enlace",
+              "displayName": "Enlace",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Resumen",
+              "displayName": "Resumen",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "IA",
+              "displayName": "IA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Approve",
+              "displayName": "Approve",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "processed",
+              "displayName": "processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1392,
+        208
+      ],
+      "id": "2f6f1340-60b5-42d6-97c8-3d41d8427290",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7b96af3b-7fb2-4300-b7b7-3034406e773f",
+              "name": "isoDate",
+              "value": "={{ $json.isoDate ? new Date($json.isoDate).toISOString() : null }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        208
+      ],
+      "id": "4f528511-6766-4f29-bdeb-de7b63170d01",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "hour": 11
+            }
+          ]
+        }
+      },
+      "id": "3661fdfc-610d-430d-994f-c2f2a69e8de7",
+      "name": "Cron (every day at 11am)",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        208
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "RSS - Feed 1": {
+      "main": [
+        [
+          {
+            "node": "Merge (+ Feed3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS - Feed 2": {
+      "main": [
+        [
+          {
+            "node": "Merge (+ Feed3)",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge (+ Feed3)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron (every day at 11am)": {
+      "main": [
+        [
+          {
+            "node": "RSS - Feed 1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS - Feed 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "d1654ac8-3fbd-4cbc-9341-59d7559d19c6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "696601caa1fbb1dbd8acaa22bdf109f9f9c6d420246b29e980e9d859054371c6"
+  },
+  "id": "gO3dp91iQYklaFPt",
+  "tags": []
+}
