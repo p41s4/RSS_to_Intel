@@ -1,0 +1,494 @@
+{
+  "name": "Feed to Teams",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ipUXs3zSgGLu0Qsd",
+          "mode": "list",
+          "cachedResultName": "n8n trial",
+          "cachedResultUrl": "/projects/zajYkWfY1ssBgpMH/datatables/ipUXs3zSgGLu0Qsd"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        0
+      ],
+      "id": "60e2fd24-904c-48b9-a614-de0e2e0f2928",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.Enlace }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        960,
+        0
+      ],
+      "id": "0d505fae-a44b-4dc1-9f67-c5597e86b835",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "articleText",
+              "cssSelector": "article"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1472,
+        0
+      ],
+      "id": "ff058a55-9acc-4d91-8179-6c30e280bb1b",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "26d94c4b-6196-4a7e-93ea-525de6e20bd8",
+              "leftValue": "={{ $json.Approve }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f2eb2659-073c-4299-a115-41964984b07a",
+              "leftValue": "={{ $json.processed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        0
+      ],
+      "id": "3eebd80e-6519-4787-bad7-2c6d0fea22c1",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ipUXs3zSgGLu0Qsd",
+          "mode": "list",
+          "cachedResultName": "n8n trial",
+          "cachedResultUrl": "/projects/zajYkWfY1ssBgpMH/datatables/ipUXs3zSgGLu0Qsd"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.rowID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Approve": false,
+            "processed": true,
+            "IA": "={{ $('AI Agent').item.json.output }}",
+            "rowID": 0
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Enlace",
+              "displayName": "Enlace",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Resumen",
+              "displayName": "Resumen",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "IA",
+              "displayName": "IA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Approve",
+              "displayName": "Approve",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "processed",
+              "displayName": "processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "rowID",
+              "displayName": "rowID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2704,
+        0
+      ],
+      "id": "759f03df-3b7c-4644-a04d-2efc4fe6ffd0",
+      "name": "Update row(s)1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "63a168e9-3c15-484c-9f7c-08439ccc1fc8",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Threat Intel Analyst that has to assess articles for their threat level and their relevance to my company. The article is that one:\"{{ $json.articleText }}\". We define a threat as something where Opportunity, Malicious Intent and Capability overlap. Opportunity is the \"weak link\" that someone leverages to achieve a malicious goal - like a vulnerability or a product that has a vulnerability. Capability is what a malicious actor has to do to make use of the opportunity. Intent is what the malicious actor actually wants to achieve. If only Capability and opportunity are present we speak of a \"Potential\" Threat. If Intent and Capability overlap we call this an \"impending\" Threat. Where only Intent and Opportunity overlap we consider this as \"insubstantial\" threat.\n \n \nPlease analyze the following article as follows:\nstart with a two-sentenced summary of the article.\nelaborate on prerequistes to execute the described attack.\nPlease summarize all details about the threat actor / activity group.\nPlease Look for targeted industries, countries or regions and summarize those under \"Victimology\"\nList in short Bullets what is Capability, what is opportunity and what is intent. In each category give a short summary and then list specific product names and vulnerabilities (CVEs) under \"Opportunity\" e.g. for vulnerable products or respectively under \"capability\" if it's an attack tool or Malware.\nPlease add all huntable artifacts and IOCs in a dedicated section.\nAt the end please give a short description of every attack technique mentioned in the article written for people with low technical understanding",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2048,
+        0
+      ],
+      "id": "5ac24720-5045-420f-a367-c694ca65b43b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1968,
+        208
+      ],
+      "id": "84857ec5-39f5-462a-85f2-94bacb4eef12",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "CdS44C4Dv2E8SrWX",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1216,
+        -144
+      ],
+      "id": "82039a49-9e08-472b-a1b5-c5c947e13983",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1776,
+        -144
+      ],
+      "id": "e44f3122-c5ee-424d-834a-16405710da3c",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "31bc05c0-70f8-421d-8d18-043ed8cc6533",
+              "name": "rowID",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        0
+      ],
+      "id": "df9f74de-d9bb-4da9-b74f-9175352d194c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2448,
+        -144
+      ],
+      "id": "0ad5c436-0f89-4f40-a22b-218f2bbf2564",
+      "name": "Merge2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)1": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "bab12704-12ee-4cf4-a0de-b09cc3c1bb95",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "696601caa1fbb1dbd8acaa22bdf109f9f9c6d420246b29e980e9d859054371c6"
+  },
+  "id": "hEHUyK9fyl2jmVeQ",
+  "tags": []
+}
