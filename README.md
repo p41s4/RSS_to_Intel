@@ -12,7 +12,10 @@ Este proyecto implementa una pipeline automatizada de Threat Intelligence constr
 El sistema está dividido en dos workflows independientes pero complementarios, que deben ejecutarse en el siguiente orden:
 
 1. RSS Daily Feed  
+<img width="1381" height="356" alt="image" src="https://github.com/user-attachments/assets/7a72cbad-a3a4-4c9f-a67a-c8d43f6c0187" />
+
 2. Feed to Teams  
+<img width="1597" height="373" alt="image" src="https://github.com/user-attachments/assets/1876cd3f-b221-4387-bc81-0e269b4aaf75" />
 
 ---
 
