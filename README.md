@@ -1,5 +1,5 @@
 # Threat Intelligence RSS Automation – Daily Feed to Teams
-
+**Este proyecto está bajo mantenimiento**
 ## Descripción general
 
 Este proyecto implementa una pipeline automatizada de Threat Intelligence construida en n8n, cuyo objetivo es:
