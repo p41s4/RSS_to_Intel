@@ -1,15 +1,16 @@
 # Threat Intelligence RSS Automation – Daily Feed to Teams
-**Este proyecto está bajo mantenimiento**
-## Descripción general
+**This project is under maintenance**
 
-Este proyecto implementa una pipeline automatizada de Threat Intelligence construida en n8n, cuyo objetivo es:
+## General Description
 
-- Recopilar diariamente noticias de ciberseguridad desde múltiples feeds RSS
-- Almacenarlas de forma centralizada
-- Analizarlas automáticamente con IA
-- Publicar únicamente los artículos relevantes y aprobados en Microsoft Teams
+This project implements an automated **Threat Intelligence pipeline** built in **n8n**, with the goal of:
 
-El sistema está dividido en dos workflows independientes pero complementarios, que deben ejecutarse en el siguiente orden:
+- Collecting daily cybersecurity news from multiple RSS feeds
+- Storing them in a centralized repository
+- Automatically analyzing them using AI
+- Publishing only relevant and approved articles to Microsoft Teams
+
+The system is divided into two independent but complementary workflows, which must be executed in the following order:
 
 1. RSS Daily Feed  
 <img width="1381" height="356" alt="image" src="https://github.com/user-attachments/assets/7a72cbad-a3a4-4c9f-a67a-c8d43f6c0187" />
@@ -19,7 +20,7 @@ El sistema está dividido en dos workflows independientes pero complementarios, 
 
 ---
 
-## Arquitectura del sistema
+## System Architecture
 
 RSS Feeds → RSS Daily Feed → Data Table  
                               ↓  
@@ -33,135 +34,134 @@ RSS Feeds → RSS Daily Feed → Data Table
 
 ## 1. RSS Daily Feed
 
-### Objetivo
+### Objective
 
-Recolectar noticias de ciberseguridad publicadas durante el día, filtrarlas por fecha y almacenarlas en una tabla central para su posterior análisis.
+Collect cybersecurity news published during the day, filter them by date, and store them in a central table for later analysis.
 
-### Funcionamiento
+### How it works
 
-1. Ejecución programada  
-   - Se ejecuta automáticamente todos los días a las 11:00 mediante un nodo Cron.
+1. Scheduled execution  
+   - Runs automatically every day at 11:00 via a Cron node.
 
-2. Lectura de feeds RSS  
-   - Consume múltiples fuentes, por ejemplo:
+2. RSS feed ingestion  
+   - Consumes multiple sources, for example:
      - BleepingComputer
      - The Hacker News
 
-3. Unificación de resultados  
-   - Los artículos de todos los feeds se combinan en un único flujo.
+3. Results unification  
+   - Articles from all feeds are merged into a single stream.
 
-4. Normalización de fechas  
-   - Se convierte el campo isoDate a formato ISO estándar.
+4. Date normalization  
+   - The `isoDate` field is converted to standard ISO format.
 
-5. Filtrado temporal  
-   - Solo se procesan artículos:
-     - Con fecha válida
-     - Publicados después del inicio del día actual
+5. Time-based filtering  
+   - Only articles are processed that:
+     - Have a valid date
+     - Were published after the start of the current day
 
-6. Persistencia  
-   - Cada artículo se inserta en una Data Table con los campos:
-     - Titulo
-     - Enlace
-     - Resumen
+6. Persistence  
+   - Each article is inserted into a Data Table with the following fields:
+     - Title
+     - Link
+     - Summary
      - Approve = false
      - processed = false
 
-Resultado: una cola diaria de artículos pendientes de análisis.
+Result: a daily queue of articles pending analysis.
 
 ---
 
 ## 2. Feed to Intel
 
-### Objetivo
+### Objective
 
-Analizar los artículos recopilados, evaluar su nivel de amenaza y relevancia, y publicar automáticamente los más relevantes en Microsoft Teams/Slack/Telegram/etc.
+Analyze the collected articles, assess their threat level and relevance, and automatically publish the most relevant ones to Microsoft Teams/Slack/Telegram/etc.
 
-### Funcionamiento
+### How it works
 
-1. Lectura de artículos  
-   - Se recuperan las filas de la Data Table.
+1. Article retrieval  
+   - Rows are fetched from the Data Table.
 
-2. Filtrado inicial  
-   - Solo se procesan artículos que cumplan:
+2. Initial filtering  
+   - Only articles that meet the following conditions are processed:
      - Approve = true
      - processed = false
 
-3. Descarga del contenido  
-   - Se accede al enlace del artículo vía HTTP.
-   - Se extrae el texto principal mediante parsing HTML (etiqueta article).
+3. Content retrieval  
+   - The article link is accessed via HTTP.
+   - The main content is extracted using HTML parsing (article tag).
 
-4. Análisis con IA  
-   - Un AI Agent actúa como Threat Intelligence Analyst y evalúa:
-     - Resumen del artículo
-     - Prerrequisitos del ataque
-     - Actores de amenaza
-     - Victimología (industrias, países o regiones)
-     - Capability, Opportunity e Intent
-     - IOCs y artefactos cazables
-     - Técnicas de ataque explicadas en lenguaje no técnico
+4. AI analysis  
+   - An AI Agent acts as a Threat Intelligence Analyst and evaluates:
+     - Article summary
+     - Attack prerequisites
+     - Threat actors
+     - Victimology (industries, countries, or regions)
+     - Capability, Opportunity, and Intent
+     - IOCs and huntable artifacts
+     - Attack techniques explained in non-technical language
 
-   La amenaza se clasifica como:
+   The threat is classified as:
    - Potential
    - Impending
    - Insubstantial
 
-5. Actualización de estado  
-   - El resultado del análisis IA se guarda en la tabla.
-   - El artículo se marca como:
+5. Status update  
+   - The AI analysis result is stored in the table.
+   - The article is marked as:
      - processed = true
      - Approve = false
 
-6. Publicación  
-   - El contenido analizado puede enviarse automáticamente a Microsoft Teams como mensaje estructurado.
+6. Publishing  
+   - The analyzed content can be automatically sent to Microsoft Teams as a structured message.
 
 ---
 
-## Resultado final
+## Final Outcome
 
-El sistema entrega:
+The system delivers:
 
-- Un feed diario curado de Threat Intelligence
-- Artículos analizados y clasificados por riesgo
-- Información enriquecida con contexto técnico y estratégico
-- Contenido listo para:
-  - SOC
+- A curated daily Threat Intelligence feed
+- Articles analyzed and classified by risk
+- Enriched information with technical and strategic context
+- Content ready for:
+  - SOC teams
   - Threat Hunters
-  - Analistas CTI
-  - Consumo ejecutivo
+  - CTI Analysts
+  - Executive consumption
 
 ---
 
-## Data Table – Esquema
+## Data Table – Schema
 
-| Campo     | Descripción |
+| Field     | Description |
 |----------|-------------|
-| Titulo   | Título del artículo |
-| Enlace   | URL original |
-| Resumen  | Extracto del feed RSS |
-| IA       | Análisis generado por IA |
-| Approve  | Control manual de aprobación |
-| processed| Evita reprocesamiento |
-| rowID    | Identificador interno |
+| Title    | Article title |
+| Link     | Original URL |
+| Summary  | RSS feed excerpt |
+| AI       | AI-generated analysis |
+| Approve  | Manual approval control |
+| processed| Prevents reprocessing |
+| rowID    | Internal identifier |
 
 ---
 
-## Requisitos
+## Requirements
 
-- Instancia funcional de n8n
-- Acceso a:
-  - Feeds RSS públicos
+- Functional n8n instance
+- Access to:
+  - Public RSS feeds
   - OpenAI API
-  - Microsoft Teams (Webhook o conector)
-- Conocimientos básicos de:
-  - Automatización con n8n
+  - Microsoft Teams (Webhook or connector)
+- Basic knowledge of:
+  - Automation with n8n
 
 ---
 
-## Posibles extensiones
+## Possible extensions
 
-- Aprobación automática basada en IA
-- Integración con SIEM o SOAR
-- Scoring de riesgo
-- Dashboard de métricas CTI
-- Evolución hacia una plataforma RAG de Threat Intelligence
-
+- AI-based automatic approval
+- Integration with SIEM or SOAR platforms
+- Risk scoring
+- CTI metrics dashboard
+- Evolution into a full Threat Intelligence RAG platform
