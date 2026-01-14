@@ -6,13 +6,13 @@
         "url": "https://www.bleepingcomputer.com/feed/",
         "options": {}
       },
-      "id": "05f09e89-9627-4bea-8957-3fc81cc5a9f1",
+      "id": "3cfd18a4-dee4-495f-8283-18b5549b9948",
       "name": "RSS - Feed 1",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        288,
-        80
+        0,
+        0
       ]
     },
     {
@@ -20,24 +20,24 @@
         "url": "https://feeds.feedburner.com/TheHackersNews",
         "options": {}
       },
-      "id": "b9c0bc97-7992-464f-9f6e-a2986c014643",
+      "id": "029358f5-fc4e-4234-ab55-a0d98478a865",
       "name": "RSS - Feed 2",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        288,
-        320
+        0,
+        240
       ]
     },
     {
       "parameters": {},
-      "id": "8e09ef83-6dfb-4548-8702-cb9bcfb3ec98",
+      "id": "f1ff864e-0828-4347-b6b0-0702dd2de01f",
       "name": "Merge (+ Feed3)",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 2,
       "position": [
-        704,
-        208
+        416,
+        128
       ]
     },
     {
@@ -53,7 +53,7 @@
             {
               "id": "91e5a4dc-1124-4198-8ec0-bace7352f2ce",
               "leftValue": "={{ new Date($json.isoDate) }}",
-              "rightValue": "={{ new Date(new Date().setHours(0,0,0,0)) }}",
+              "rightValue": "={{ new Date(Date.now() - 60 * 60 * 1000) }}",
               "operator": {
                 "type": "dateTime",
                 "operation": "after"
@@ -77,35 +77,34 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        1168,
-        208
+        880,
+        128
       ],
-      "id": "e794005d-c54e-4083-b721-6ba71a81d72e",
+      "id": "989ed531-6db7-427a-9a8e-ec80ccd2660c",
       "name": "Filter"
     },
     {
       "parameters": {
         "dataTableId": {
           "__rl": true,
-          "value": "ipUXs3zSgGLu0Qsd",
+          "value": "O0Cl9SNPiKdOTSFQ",
           "mode": "list",
-          "cachedResultName": "n8n trial",
-          "cachedResultUrl": "/projects/zajYkWfY1ssBgpMH/datatables/ipUXs3zSgGLu0Qsd"
+          "cachedResultName": "feed",
+          "cachedResultUrl": "/projects/tuQxsw3zrwEkZYwL/datatables/O0Cl9SNPiKdOTSFQ"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Titulo": "={{ $json.title }}",
-            "Enlace": "={{ $json.link }}",
-            "Resumen": "={{ $json.content }}",
-            "Approve": false,
-            "processed": false
+            "Title": "={{ $json.title }}",
+            "Link": "={{ $json.link }}",
+            "Summary": "={{ $json.content }}",
+            "Approval": "={{ false }}"
           },
           "matchingColumns": [],
           "schema": [
             {
-              "id": "Titulo",
-              "displayName": "Titulo",
+              "id": "Title",
+              "displayName": "Title",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -114,8 +113,8 @@
               "removed": false
             },
             {
-              "id": "Enlace",
-              "displayName": "Enlace",
+              "id": "Link",
+              "displayName": "Link",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -124,8 +123,8 @@
               "removed": false
             },
             {
-              "id": "Resumen",
-              "displayName": "Resumen",
+              "id": "Summary",
+              "displayName": "Summary",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -134,18 +133,18 @@
               "removed": false
             },
             {
-              "id": "IA",
-              "displayName": "IA",
+              "id": "Sent",
+              "displayName": "Sent",
               "required": false,
               "defaultMatch": false,
               "display": true,
-              "type": "string",
+              "type": "dateTime",
               "readOnly": false,
-              "removed": true
+              "removed": false
             },
             {
-              "id": "Approve",
-              "displayName": "Approve",
+              "id": "Approval",
+              "displayName": "Approval",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -154,12 +153,12 @@
               "removed": false
             },
             {
-              "id": "processed",
-              "displayName": "processed",
+              "id": "DailyArticle",
+              "displayName": "DailyArticle",
               "required": false,
               "defaultMatch": false,
               "display": true,
-              "type": "boolean",
+              "type": "dateTime",
               "readOnly": false,
               "removed": false
             }
@@ -167,15 +166,17 @@
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
-        "options": {}
+        "options": {
+          "optimizeBulk": false
+        }
       },
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1392,
-        208
+        1104,
+        128
       ],
-      "id": "2f6f1340-60b5-42d6-97c8-3d41d8427290",
+      "id": "17eb40fb-44bd-4792-a524-f2f0f2cc9d2f",
       "name": "Insert row"
     },
     {
@@ -196,10 +197,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        912,
-        208
+        624,
+        128
       ],
-      "id": "4f528511-6766-4f29-bdeb-de7b63170d01",
+      "id": "cd3963d7-f7bf-49d2-9868-fe766c401bd5",
       "name": "Edit Fields"
     },
     {
@@ -207,18 +208,18 @@
         "triggerTimes": {
           "item": [
             {
-              "hour": 11
+              "mode": "everyHour"
             }
           ]
         }
       },
-      "id": "3661fdfc-610d-430d-994f-c2f2a69e8de7",
-      "name": "Cron (every day at 11am)",
+      "id": "dc1d74dc-549f-49cc-a067-25d82f467b07",
+      "name": "Cron (every minute)",
       "type": "n8n-nodes-base.cron",
       "typeVersion": 1,
       "position": [
-        -80,
-        208
+        -368,
+        128
       ]
     }
   ],
@@ -268,11 +269,6 @@
         ]
       ]
     },
-    "Insert row": {
-      "main": [
-        []
-      ]
-    },
     "Edit Fields": {
       "main": [
         [
@@ -284,7 +280,7 @@
         ]
       ]
     },
-    "Cron (every day at 11am)": {
+    "Cron (every minute)": {
       "main": [
         [
           {
@@ -306,11 +302,10 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "d1654ac8-3fbd-4cbc-9341-59d7559d19c6",
+  "versionId": "40b94aa8-8148-4bf0-b544-bccc1bb3be65",
   "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "696601caa1fbb1dbd8acaa22bdf109f9f9c6d420246b29e980e9d859054371c6"
+    "instanceId": "111ab2dce887c7f02529337eb3fc612520a59d621d6241f6d1da7daad90ed710"
   },
-  "id": "gO3dp91iQYklaFPt",
+  "id": "Spt5TFPUXD4Ndn5uo7oKE",
   "tags": []
 }
