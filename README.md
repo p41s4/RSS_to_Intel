@@ -139,7 +139,7 @@ The system delivers:
 | Title    | Article title |
 | Link     | Original URL |
 | Summary  | RSS feed excerpt |
-| Sent       | AI-generated analysis |
+| Sent       | Date Tracker |
 | Approval  | Manual approval control |
 | DailyArticle | Prevents reprocessing |
 
