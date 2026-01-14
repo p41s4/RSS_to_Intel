@@ -15,8 +15,9 @@ The system is divided into two independent but complementary workflows, which mu
 1. RSS Daily Feed  
 <img width="1381" height="356" alt="image" src="https://github.com/user-attachments/assets/7a72cbad-a3a4-4c9f-a67a-c8d43f6c0187" />
 
-2. Feed to Teams  
-<img width="1597" height="373" alt="image" src="https://github.com/user-attachments/assets/1876cd3f-b221-4387-bc81-0e269b4aaf75" />
+2. Feed to Teams/Telegram/slack (whatever you want)
+<img width="1735" height="347" alt="image" src="https://github.com/user-attachments/assets/c556b883-b17d-4e09-9f55-b3077e233a4f" />
+
 
 ---
 
@@ -139,10 +140,9 @@ The system delivers:
 | Title    | Article title |
 | Link     | Original URL |
 | Summary  | RSS feed excerpt |
-| AI       | AI-generated analysis |
-| Approve  | Manual approval control |
-| processed| Prevents reprocessing |
-| rowID    | Internal identifier |
+| Sent       | AI-generated analysis |
+| Approval  | Manual approval control |
+| DailyArticle | Prevents reprocessing |
 
 ---
 
@@ -152,7 +152,6 @@ The system delivers:
 - Access to:
   - Public RSS feeds
   - OpenAI API
-  - Microsoft Teams (Webhook or connector)
 - Basic knowledge of:
   - Automation with n8n
 
