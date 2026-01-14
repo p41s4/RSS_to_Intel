@@ -1,5 +1,4 @@
 # Threat Intelligence RSS Automation – Daily Feed to Teams
-**This project is under maintenance**
 
 ## General Description
 
